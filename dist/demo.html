@@ -3,10 +3,42 @@
 <html>
     <head>
         <title>Species Autocomplete: A Demo</title>
+
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css">
+        <script src="http://code.jquery.com/jquery-1.9.0.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
     </head>
     <body>
         <h1>Species Autocomplete</h1>
         
         <p>Here is a demo of the species autocomplete system.</p>        
+
+        <input id="autocomplete">
+
+        <textarea id="test"></textarea>
+        
+        <script>
+            $( "#autocomplete" ).autocomplete({
+                source:     "search.php",
+                focus: function(event, ui) {
+                    $("#test").val(ui.item.acceptedName);
+                }, 
+                select: function(event, ui) {
+                },
+            });
+
+            $("#autocomplete").data( "uiAutocomplete" )._renderItem = function( ul, item ) {
+                str = "<a>" + 
+                    "<span class='accepted_name'><em>" + 
+                    item.acceptedName + "</em></span> (family " + item.family + ")" +
+                    "</a>"
+                ;
+
+                return $( "<li>" )
+                  .append( str )
+                  .appendTo( ul );
+            };
+
+        </script>
     </body>
 </html>

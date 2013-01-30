@@ -6,7 +6,7 @@
 $SQLITE_PATH = "/tmp/species-autocomplete.sqlite3";
 
 // What is the smallest number of characters at which the autocomplete kicks in?
-$MIN_LENGTH = 3;
+$MIN_LENGTH = 1;
 
 // END OF CONFIGURATION
 
@@ -25,7 +25,7 @@ if(!$sqlite->exec("DELETE FROM autocomplete;")) {
 print "Dropped previous autocomplete index.\n";
 
 // Prepare our insert statement.
-$insert_ac = $sqlite->prepare("INSERT INTO autocomplete (string, name) VALUES (:string, :name);");
+$insert_ac = $sqlite->prepare("INSERT INTO autocomplete (string, name, score) VALUES (:string, :name, :score);");
 
 // Load names.
 $results = $sqlite->query('SELECT name FROM names;');
@@ -38,12 +38,18 @@ $count_words = 0;
 $count_ac = 0;
 while ($row = $results->fetchArray( SQLITE3_NUM )) {
     $name = $row[0];
+    $canon_name = $row[1];
     
     $count_names++;
 
     // Confusingly, this returns an array of all the words in this
     // string. Fun!
     $words = str_word_count($name, 1);
+    
+    // But do the whole name too!
+    array_push($words, $name);
+    
+    // TODO: ngrams?
 
     foreach($words as $word) {
         if(strlen($word) < $MIN_LENGTH) {
@@ -55,8 +61,9 @@ while ($row = $results->fetchArray( SQLITE3_NUM )) {
                 $ac_bit = substr($word, 0, $x);
 
                 # print "Found '$ac_bit' => '$word'.\n";
-                $insert_ac->bindParam(':string', $ac_bit, SQLITE3_TEXT);
-                $insert_ac->bindParam(':name', $name, SQLITE3_TEXT);
+                $insert_ac->bindValue(':string', $ac_bit, SQLITE3_TEXT);
+                $insert_ac->bindValue(':name', $name, SQLITE3_TEXT);
+                $insert_ac->bindValue(':score', 0, SQLITE3_INTEGER);
                 if(!$insert_ac->execute()) {
                     die("Unable to execute statement '$insert_ac'.");
                 }
