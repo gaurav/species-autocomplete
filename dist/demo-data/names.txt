@@ -1,0 +1,6 @@
+canonicalName|acceptedName|source
+Felis tigris|Pantera tigris|http://en.wikipedia.org/wiki/Panthera_tigris
+Homo sapiens|Homo sapiens|http://en.wikipedia.org/wiki/Homo_sapiens
+Gorilla gorilla|Gorilla gorilla gorilla|http://en.wikipedia.org/wiki/Gorilla_gorilla
+Gorilla gorilla|Gorilla berengei|http://en.wikipedia.org/wiki/Gorilla_berengei
+
