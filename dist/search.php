@@ -1,24 +1,29 @@
 <?php
 
 // Configuration options.
-$SQLITE_PATH = ""; // If blank, defaults to "$TMPDIR/species-autocomplete.sqlite3"
+$SQLITE_PATH = "/tmp/species-autocomplete.sqlite3";
 
-// Does the demo SQLite data exist?
-if($SQLITE_PATH == "") {
-    $SQLITE_PATH = sys_get_temp_dir() . $DIRECTORY_SEPARATOR . "species-autocomplete.sqlite3";
+// End of configuration options.
+
+// Load SQLite3 database.
+try {
+    $sqlite = new SQLite3($SQLITE_PATH);
+} catch(Exception $e) {
+    die("Could not open SQLite3 path '$SQLITE_PATH': $sqlite");
 }
 
-$sqlite = sqlite_open($SQLITE_PATH, $sqlite_error);
-if(!$sqlite) {
-    die("Could not open '$SQLITE_PATH': $sqlite_error");
+$s = $sqlite->prepare("SELECT names.name, canonicalName, acceptedName, source FROM names JOIN autocomplete ON names.name = autocomplete.name WHERE string = :query");
+$s->bindValue(":query", $_GET['q']);
+$results = $s->execute();
+
+$results_all = array();
+while($row = $results->fetchArray(SQLITE3_NUM)) {
+    array_push($results_all, $row);
 }
 
-// Database open! Check for the 'names' table.
-if(!sqlite_fetch_column_types("names", $sqlite)) {
-    // Build one.
-    sqlite_exec("CREATE TABLE names (name, 
-}
+header("Content-type: text/plain");
+print json_encode($results_all);
 
-sqlite_close($sqlite);
+$sqlite->close();
 
 ?>
