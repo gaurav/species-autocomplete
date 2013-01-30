@@ -25,10 +25,10 @@ if(!$sqlite->exec("DELETE FROM autocomplete;")) {
 print "Dropped previous autocomplete index.\n";
 
 // Prepare our insert statement.
-$insert_ac = $sqlite->prepare("INSERT INTO autocomplete (string, name, score) VALUES (:string, :name, :score);");
+$insert_ac = $sqlite->prepare("INSERT INTO autocomplete (string, canonicalName, score) VALUES (:string, :name, :score);");
 
 // Load names.
-$results = $sqlite->query('SELECT name FROM names;');
+$results = $sqlite->query('SELECT canonicalName FROM names;');
 if($results === FALSE) {
     die("Could not read names from database.");
 }
@@ -58,7 +58,7 @@ while ($row = $results->fetchArray( SQLITE3_NUM )) {
             $count_words++;
 
             for($x = $MIN_LENGTH; $x <= strlen($word); $x++) {
-                $ac_bit = substr($word, 0, $x);
+                $ac_bit = strtolower(substr($word, 0, $x));
 
                 # print "Found '$ac_bit' => '$word'.\n";
                 $insert_ac->bindValue(':string', $ac_bit, SQLITE3_TEXT);
