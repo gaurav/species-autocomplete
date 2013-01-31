@@ -1,7 +1,7 @@
 species-autocomplete
 ====================
 
-A Phylotastic 2 project to autocomplete species names over the web. This
+A [Phylotastic 2](http://evoio.org/wiki/Phylotastic) project to autocomplete species names over the web. This
 project consists of three components:
 
 1. The `init` folder contains the files necessary to set up the SQLite database.
