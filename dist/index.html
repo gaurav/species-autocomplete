@@ -83,12 +83,26 @@
             });
 
             $("#autocomplete").data( "uiAutocomplete" )._renderItem = function( ul, item ) {
+                // Turns the end of the list into a '...' type option.
+                if($("li", ul).length >= 9) {
+                    return $("<li>")
+                        .append("(enter more characters for more options)")
+                        .appendTo(ul);
+                }
+
                 var name = item.canonicalName;
                 name[0] = name[0].toUpperCase();
 
+                var accepted_name_str = "";
+                if(item.scientificName != item.acceptedName) {
+                    acceted_name_str = "<span class='accepted_name'>Accepted name: " + item.acceptedName + "</span><br>";
+                }
+
                 str = "<a>" + 
-                    "<span class='accepted_name'><em>" + name +
-                    "</em></span> (family " + item.family + ")" +
+                    "<span class='canonical_name'><em>" + name +
+                    "</em></span><br>" +
+                    accepted_name_str +
+                    "<span class='family'>Family: " + item.family + "</span>" +
                     "</a>"
                 ;
 
