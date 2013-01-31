@@ -18,6 +18,8 @@ $results = $s->execute();
 
 $results_all = array();
 while($row = $results->fetchArray(SQLITE3_ASSOC)) {
+    // Hack: convert canonical names from 'abc def' to 'Abc def'.
+    $row['canonicalName'][0] = strtoupper($row['canonicalName'][0]);
     array_push($results_all, $row);
 }
 

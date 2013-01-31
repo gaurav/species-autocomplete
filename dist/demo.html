@@ -9,28 +9,86 @@
         <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
     </head>
     <body>
+        <a href="https://github.com/gaurav/species-autocomplete"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
+
         <h1>Species Autocomplete</h1>
         
-        <p>Here is a demo of the species autocomplete system.</p>        
+        <p>This is a demo of an autocomplete system for species names. The list of names used here are from ITIS and were extracted from <a href="http://gaurav.github.com/itis-dwca/">itis-dwca</a>.</p>        
 
-        <input id="autocomplete">
+        <p>The following values are retrieved from the server.</p>
 
-        <textarea id="test"></textarea>
-        
+        <div class="results" style="margin-left: 20px; float: left;">
+            Enter a scientific name here: 
+            <input autocomplete="off" id="autocomplete">
+        </div>
+
+        <div style="float: left; margin-left: 100px;">
+            <table border="1">
+                <tr>
+                    <td>Canonical name</td>
+                    <td id="canonicalName" style="min-width: 100px; font-style: italic;"></td>
+                </tr>
+                <tr>
+                    <td>Accepted name</td>
+                    <td id="acceptedNameUsage"></td>
+                </tr>
+                <tr>
+                    <td>Scientific name</td>
+                    <td id="scientificName"></td>
+                </tr>
+                <tr>
+                    <td>Name according to</td>
+                    <td id="nameAccordingTo"></td>
+                </tr>
+                <tr>
+                    <td>Family</td>
+                    <td id="family"></td>
+                </tr>
+                <tr>
+                    <td>Source</td>
+                    <td id="dc_source"></td>
+                </tr>
+            </table>
+
+
+        </div>
+
+        <div style="clear:both" />
+
+        <p>For more information, check out <a href="https://github.com/gaurav/species-autocomplete">the GitHub repository</a>.</p>
+
+        <hr>
+
+        Developed on January 30 to February 1, 2012, as part of <a href="http://evoio.org/wiki/Phylotastic">Phylotastic 2</a> in Tucson, Arizona.<br>
+        DwC-A version of ITIS created using dwca-hunter for <a href="http://api.phylotastic.org/tnrs">Taxosaurus</a>. Retrieved December 27, 2012 from the Integrated Taxonomic Information System (ITIS) (<a href="http://www.itis.gov/">http://www.itis.gov</a>).
+
         <script>
             $( "#autocomplete" ).autocomplete({
-                source:     "search.php",
+                source:     "autocomplete.php",
                 focus: function(event, ui) {
-                    $("#test").val(ui.item.acceptedName);
+                    $("#canonicalName").html        (ui.item.canonicalName);
+                    $("#acceptedNameUsage").html    (ui.item.acceptedName);
+                    $("#scientificName").html       (ui.item.scientificName);
+                    $("#nameAccordingTo").html      (ui.item.nameAccordingTo);
+                    $("#family").html               (ui.item.family);
+                    $("#dc_source").html            (
+                        $("<a>")
+                            .html(ui.item.source)
+                            .attr("href", ui.item.source)
+                            .attr("target", "itis_lookup")
+                    );
                 }, 
                 select: function(event, ui) {
                 },
             });
 
             $("#autocomplete").data( "uiAutocomplete" )._renderItem = function( ul, item ) {
+                var name = item.canonicalName;
+                name[0] = name[0].toUpperCase();
+
                 str = "<a>" + 
-                    "<span class='accepted_name'><em>" + 
-                    item.acceptedName + "</em></span> (family " + item.family + ")" +
+                    "<span class='accepted_name'><em>" + name +
+                    "</em></span> (family " + item.family + ")" +
                     "</a>"
                 ;
 
