@@ -3,7 +3,7 @@
 // CONFIGURATION
 
 // If blank, defaults to "$TMPDIR/species-autocomplete.sqlite3"
-$SQLITE_PATH = "/tmp/species-autocomplete.sqlite3";
+$SQLITE_PATH = getenv("HOME") . "/sqlite/species-autocomplete-itis.sqlite3";
 
 // What is the smallest number of characters at which the autocomplete kicks in?
 $MIN_LENGTH = 1;
@@ -42,6 +42,10 @@ while ($row = $results->fetchArray( SQLITE3_NUM )) {
     
     $count_names++;
 
+    if($count_names % 1000 == 0) {
+        print "$count_names names added.\n";
+    }
+
     // Confusingly, this returns an array of all the words in this
     // string. Fun!
     $words = str_word_count($name, 1);
@@ -52,6 +56,8 @@ while ($row = $results->fetchArray( SQLITE3_NUM )) {
     // TODO: ngrams?
 
     foreach($words as $word) {
+        # print "Adding $word from $name (#$count_names).\n";
+
         if(strlen($word) < $MIN_LENGTH) {
             print "Ignoring word '$word', smaller than minimum length ($MIN_LENGTH).\n";
         } else {

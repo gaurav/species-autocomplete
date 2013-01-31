@@ -1,7 +1,7 @@
 <?php
 
 // Configuration options.
-$SQLITE_PATH = "/tmp/species-autocomplete.sqlite3";
+$SQLITE_PATH = getenv("HOME") . "/sqlite/species-autocomplete.sqlite3";
 
 // End of configuration options.
 
