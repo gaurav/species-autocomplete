@@ -12,7 +12,7 @@ try {
     die("Could not open SQLite3 path '$SQLITE_PATH': $sqlite");
 }
 
-$s = $sqlite->prepare("SELECT names.canonicalName, acceptedName, scientificName, nameAccordingTo, family, source FROM autocomplete JOIN names ON autocomplete.canonicalName = names.canonicalName WHERE string = :query ORDER BY score DESC LIMIT 10");
+$s = $sqlite->prepare("SELECT names.canonicalName, acceptedName, scientificName, nameAccordingTo, family, source FROM autocomplete JOIN names ON autocomplete.canonicalName = names.canonicalName WHERE string = :query ORDER BY score DESC LIMIT 7");
 $s->bindValue(":query", strtolower($_GET['term']));
 $results = $s->execute();
 

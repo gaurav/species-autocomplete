@@ -84,7 +84,7 @@
 
             $("#autocomplete").data( "uiAutocomplete" )._renderItem = function( ul, item ) {
                 // Turns the end of the list into a '...' type option.
-                if($("li", ul).length >= 9) {
+                if($("li", ul).length >= 6) {
                     return $("<li>")
                         .append("(enter more characters for more options)")
                         .appendTo(ul);

@@ -1,13 +1,14 @@
 species-autocomplete
 ====================
 
-A [Phylotastic 2](http://evoio.org/wiki/Phylotastic) project to autocomplete species names over the web. This
-project consists of three components:
+A [Phylotastic 2](http://evoio.org/wiki/Phylotastic) project to autocomplete 
+species names over the web. It is made available under the MIT license 
+(see LICENSE). This project consists of three components:
 
-1. The `init` folder contains the files necessary to set up the SQLite database.
+1. The `init` folder contains the files necessary to set up an SQLite database.
 `init.sql` is the initialization script for the database. You can then run
 `demo-data.sql` for really basic starting data, or you can add the names you
-want into the `names` table. Finally, run `regen-index.php` to regenerate the
+want into the `names` table. Finally, run `regen-index.php` to (re)generate the
 names index. This takes a LONG time; I hope to look into faster approaches at
 some point.
 
@@ -22,6 +23,6 @@ two important processing steps:
 
 3. The `dist` folder contains the files you need to incorporate into your
 website: `index.html`, which displays the drop-down list, and `autocomplete.php`,
-which searches a local SQLite database for the autocomplete names. 
+which searches the local SQLite database for the autocomplete names. 
 
 For more information, please [get in touch](http://www.ggvaidya.com/contact-me.html).
